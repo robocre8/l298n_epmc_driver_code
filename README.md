@@ -1,17 +1,20 @@
-# smc_l298n_pid_driver_code
-This is a child project of the Samuko Motor Controller (`smc`) project. It contains the code that is uploaded into `smc_l298n_driver module` via an FTDI programmer.
-
+# L298N EPMC Driver Code (Easy PID Motor Controller - EPMC)
+This is the code running on the microcontroller on the **Easy PID Motor Controller** (**L298N EPMC Module**).
 
 ## How to Use the Driver Code
 - Ensure you have the Arduino IDE up and running on your PC
 
 - Download (by clicking on the green Code button above) or clone the repo into your PC
 
-- Open the smc_l298n_pid_driver_code.ino file in your ArduinoIDE
+- Open the **`l298n_epmc_driver_code`** folder
 
-- select the board - `Arduino UNO` - and PORT `(based on the FTDI programmer)`. 
+- Then open the **`l298n_epmc_driver_code.ino`** in your Arduino IDE.
 
-- verify and upload the code the code to the `smc_l298n_pid_driver module` via FTDI programmer.
+- select the board - `Arduino NANO` - and choose PORT. 
+
+- choose for the processor option :`ATmega328P`
+
+- verify and upload the code the code to the **`L298N EPMC Module`** (i.e. **`Easy PID Motor Controller`**).
 
 
 ## Routes and their functions
@@ -45,3 +48,6 @@ This is a child project of the Samuko Motor Controller (`smc`) project. It conta
 - **`"/rdirB"`** : access the function to get and send **default direction [-1 or 1]**  for `motorB`. where -1 -> REVERSE and 1 -> FORWARD.
 - **`"/i2c"`** : access the function to get and send **i2c comm address**  for the `smc_l298n_pid_driver` module.
 - **`"/reset"`** : access the function to send a **reset**  command to reset all parameters to their default values.
+- **`"/freq"`** : access the function that send or set the **allowable operation frequency**. Its default value 2000Hz.
+- **`"/maxVelA"`** : access the function to send or set the **maximum commandable velocity of Motor A**. w _allowableA = (2 * PI * 2000[gotten from the `"/freq"` route]) / PPRA
+- **`"/maxVelB"`** : access the function to send or set the **maximum commandable velocity of Motor B**. w _allowableA = (2 * PI * 2000[gotten from the `"/freq"` route]) / PPRB
