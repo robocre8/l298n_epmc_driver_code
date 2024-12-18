@@ -380,8 +380,8 @@ void resetAllParams(){
   setFilterCutOffFreq_A(1.00);
   setFilterCutOffFreq_B(1.00);
 
-  setStopFreq_A(5000);
-  setStopFreq_B(5000);
+  setStopFreq_A(10000);
+  setStopFreq_B(10000);
 
   setRDIR_A(1.00);
   setRDIR_B(1.00);

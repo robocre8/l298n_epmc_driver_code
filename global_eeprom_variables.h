@@ -9,8 +9,8 @@
 // store encoder pulsePerRev needed by encoder
 float encA_ppr = 1000.0;
 float encB_ppr = 1000.0;
-unsigned long encA_stopFreq = 5000; // in us
-unsigned long encB_stopFreq = 5000; // in us
+unsigned long encA_stopFreq = 10000; // in us
+unsigned long encB_stopFreq = 10000; // in us
 
 int encA_clkPin = 2, encA_dirPin = 4; // encA_ppr parameter is decleared globally in the global_params_eeprom.h file.
 int encB_clkPin = 3, encB_dirPin = 9; // encB_ppr parameter is decleared globally in the global_params_eeprom.h file.
@@ -25,10 +25,10 @@ float rdirB = 1.00;
 
 // adaptive lowpass Filter
 int orderA = 1;
-float cutOffFreqA = 5.0;
+float cutOffFreqA = 1.0;
 
 int orderB = 1;
-float cutOffFreqB = 5.0;
+float cutOffFreqB = 1.0;
 
 // Filter instance
 AdaptiveLowPassFilter lpfA(orderA, cutOffFreqA);
