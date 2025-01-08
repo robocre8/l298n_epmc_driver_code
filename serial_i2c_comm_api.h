@@ -129,6 +129,7 @@ String setMotorsPwm(int valA, int valB)
   {
     motorA.sendPWM((int)rdirA * valA);
     motorB.sendPWM((int)rdirB * valB);
+    cmdVelTimeout = millis();
     return "1";
   }
   else
@@ -142,6 +143,9 @@ String setMotorsTarget(float valA, float valB)
 
   targetA = rdirA * tVelA;
   targetB = rdirB * tVelB;
+
+  pidMode = true;
+  cmdVelTimeout = millis();
   return "1";
 }
 /////////////////////////////////////////////////////////////////////////////////////
@@ -456,6 +460,26 @@ String setAllowedFreq(float freq)
 String sendAllowedFreq()
 {
   return String(freq_per_tick_allowable, 2);
+}
+
+String setCmdTimeout(int timeout)
+{
+  int cmdTimeout = timeout;
+  if (cmdTimeout < 10)
+  {
+    cmdVelTimeoutSampleTime = 0;
+  }
+  else
+  {
+    cmdVelTimeoutSampleTime = cmdTimeout;
+  }
+
+  cmdVelTimeout = millis();
+  return "1";
+}
+String sendCmdTimeout()
+{
+  return String(cmdVelTimeoutSampleTime);
 }
 ////////////////////////////////////////////
 
@@ -779,6 +803,16 @@ void serialReceiveAndSendData()
           ser_msg = sendMaxVelB();
         else
           ser_msg = setMaxVelB(serDataBuffer[1].toFloat());
+        Serial.println(ser_msg);
+        ser_msg = "";
+      }
+
+      else if (serDataBuffer[0] == "/timeout")
+      {
+        if (serDataBuffer[1] == "")
+          ser_msg = sendCmdTimeout();
+        else
+          ser_msg = setCmdTimeout(serDataBuffer[1].toInt());
         Serial.println(ser_msg);
         ser_msg = "";
       }

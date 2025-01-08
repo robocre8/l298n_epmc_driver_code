@@ -94,7 +94,7 @@ void pidInit()
 ////////////////////// MAIN CODE ////////////////////////////////////////
 
 unsigned long serialCommTime, serialCommSampleTime = 10; // ms -> (1000/sampleTime) hz
-unsigned long pidTime, pidSampleTime = 5;                // ms -> (1000/sampleTime) hz
+// unsigned long pidTime, pidSampleTime = 5;                // ms -> (1000/sampleTime) hz
 unsigned long pidStopTime, pidStopSampleTime = 250;      // ms -> (1000/sampleTime) hz
 
 void setup()
@@ -130,8 +130,9 @@ void setup()
   /* motor needs no initialization as it used no global variable dependent on eeprom*/
 
   serialCommTime = millis();
-  pidTime = millis();
+  // pidTime = millis();
   pidStopTime = millis();
+  cmdVelTimeout = millis();
 }
 
 void loop()
@@ -140,15 +141,32 @@ void loop()
   ///// useful for velocity reading to check when rotation has stopped
   encA.resetFrequency();
   encB.resetFrequency();
-  ///////////////////////////////////////////////////////////////////
+  //////////////////////////
 
-  ////////// using the serial communiaction API ////////////////////////
+  ////////// using the serial communiaction API ///////////////
   if ((millis() - serialCommTime) >= serialCommSampleTime)
   {
     serialReceiveAndSendData();
     serialCommTime = millis();
   }
-  /////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////
+
+  ////////////// PID OPERATION ////////////////////////////////
+  filteredAngVelA = lpfA.filter(encA.getAngVel());
+  filteredAngVelB = lpfB.filter(encB.getAngVel());
+
+  if (pidMode)
+  {
+    outputA = pidMotorA.compute(targetA, filteredAngVelA); // targetA is among the global params
+    outputB = pidMotorB.compute(targetB, filteredAngVelB); // targetB is among the global params
+
+    motorA.sendPWM((int)outputA);
+    motorB.sendPWM((int)outputB);
+  }
+  // if ((millis() - pidTime) >= pidSampleTime) {
+  //   pidTime = millis();
+  // }
+  //////////////////////////////////////////////////////////////
 
   /////////////////////////////////////////////////////////////
   if (abs(targetA) < 0.001 && abs(targetB) < 0.001)
@@ -157,6 +175,8 @@ void loop()
     {
       if ((millis() - pidStopTime) >= pidStopSampleTime)
       {
+        targetA = 0.00;
+        targetB = 0.00;
         setPidModeFunc(0);
         pidStopTime = millis();
       }
@@ -174,22 +194,18 @@ void loop()
     }
     pidStopTime = millis();
   }
-  ///////////////////////////////////////////////////////////////
+  //////////////////////////////////////////////////////////////
 
-  ////////////// PID OPERATION /////////////////////////////////
-  filteredAngVelA = lpfA.filter(encA.getAngVel());
-  filteredAngVelB = lpfB.filter(encB.getAngVel());
-
-  if (pidMode)
+  //////////////////////////////////////////////////////////////
+  int cmdTimeout = (int)cmdVelTimeoutSampleTime;
+  if (cmdTimeout > 0)
   {
-    outputA = pidMotorA.compute(targetA, filteredAngVelA); // targetA is among the global params
-    outputB = pidMotorB.compute(targetB, filteredAngVelB); // targetB is among the global params
-
-    motorA.sendPWM((int)outputA);
-    motorB.sendPWM((int)outputB);
+    if ((millis() - cmdVelTimeout) >= cmdVelTimeoutSampleTime)
+    {
+      targetA = 0.00;
+      targetB = 0.00;
+      setPidModeFunc(0); // stop motor
+    }
   }
-  // if ((millis() - pidTime) >= pidSampleTime) {
-  //   pidTime = millis();
-  // }
-  //////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////////////
 }
