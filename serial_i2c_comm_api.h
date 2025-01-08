@@ -936,6 +936,14 @@ void i2cSlaveReceiveData(int dataSizeInBytes)
     i2c_msg = sendMaxVelB();
   }
 
+  else if (i2cDataBuffer[0] == "/timeout")
+  {
+    if (i2cDataBuffer[1] == "")
+      i2c_msg = sendCmdTimeout();
+    else
+      i2c_msg = setCmdTimeout(i2cDataBuffer[1].toInt());
+  }
+
   offLed0();
   i2cMsg = "";
   i2cMsgBuffer = "";
