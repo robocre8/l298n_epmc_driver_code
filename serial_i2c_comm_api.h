@@ -402,7 +402,7 @@ String sendI2Caddress()
 String resetEEPROM()
 {
   setFIRST_TIME(0);
-  updateGlobalParamsFromEERPOM();
+  // updateGlobalParamsFromEERPOM();
   return "1";
 }
 ////////////////////////////////////////////////////////////////////////
