@@ -88,4 +88,7 @@ float calc_wB_allowable()
 float maxVelA = calc_wA_allowable(); // in radians/sec
 float maxVelB = calc_wB_allowable(); // in radians/sec
 
+// for command timeout.
+unsigned long cmdVelTimeout, cmdVelTimeoutSampleTime = 0; // ms -> (1000/sampleTime) hz
+
 #endif
