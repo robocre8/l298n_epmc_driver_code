@@ -144,7 +144,6 @@ String setMotorsTarget(float valA, float valB)
   targetA = rdirA * tVelA;
   targetB = rdirB * tVelB;
 
-  pidMode = true;
   cmdVelTimeout = millis();
   return "1";
 }
