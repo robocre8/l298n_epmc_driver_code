@@ -365,11 +365,12 @@ float getPidModeFunc(int motor_no)
 
 float setCmdTimeout(int timeout_ms)
 {
+  cmdVelTimeoutSampleTime = (long)timeout_ms;
   return 1.0;
 }
 float getCmdTimeout()
 {
-  return 1.0;
+  return (float)cmdVelTimeoutSampleTime;
 }
 
 
