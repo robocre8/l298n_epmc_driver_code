@@ -1,6 +1,7 @@
 #include <Wire.h>
 #include "global_eeprom_variables.h"
-#include "serial_i2c_comm_api.h"
+#include "serial_comm.h"
+#include "i2c_comm.h"
 
 ///////// my sepcial delay function ///////////////
 void delayMs(int ms)
@@ -112,21 +113,21 @@ void setup()
   updateGlobalParamsFromEERPOM();
   /////////////////////////////////////////////
 
-  Wire.begin(getI2CADDRESS());
-  Wire.onReceive(i2cSlaveReceiveData);
-  Wire.onRequest(i2cSlaveSendData);
-
-  onLed0();
-  delay(500);
-  offLed0();
-  delay(500);
-  onLed1();
-  delay(500);
-  offLed1();
+  Wire.onReceive(onReceive);
+  Wire.onRequest(onRequest);
+  Wire.begin(i2cAddress);
 
   encoderInit();
   pidInit();
   lpfInit();
+
+  onLed0();
+  delay(500);
+  offLed0();
+  onLed1();
+  delay(500);
+  offLed1();
+
   /* motor needs no initialization as it used no global variable dependent on eeprom*/
 
   serialCommTime = millis();
@@ -141,14 +142,15 @@ void loop()
   ///// useful for velocity reading to check when rotation has stopped
   encA.resetFrequency();
   encB.resetFrequency();
+  recieve_and_send_data();
   //////////////////////////
 
   ////////// using the serial communiaction API ///////////////
-  if ((millis() - serialCommTime) >= serialCommSampleTime)
-  {
-    serialReceiveAndSendData();
-    serialCommTime = millis();
-  }
+  // if ((millis() - serialCommTime) >= serialCommSampleTime)
+  // {
+  //   recieve_and_send_data();
+  //   serialCommTime = millis();
+  // }
   /////////////////////////////////////////////////////////////
 
   ////////////// PID OPERATION ////////////////////////////////
@@ -177,7 +179,7 @@ void loop()
       {
         targetA = 0.00;
         targetB = 0.00;
-        setPidModeFunc(0);
+        setPidModeFunc(0, 0);
         pidStopTime = millis();
       }
     }
@@ -190,7 +192,7 @@ void loop()
   {
     if (pidMode == false)
     {
-      setPidModeFunc(1);
+      setPidModeFunc(0, 1);
     }
     pidStopTime = millis();
   }
@@ -204,7 +206,7 @@ void loop()
     {
       targetA = 0.00;
       targetB = 0.00;
-      setPidModeFunc(0); // stop motor
+      setPidModeFunc(0, 0); // stop motor
     }
   }
   /////////////////////////////////////////////////////////////

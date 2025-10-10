@@ -25,10 +25,10 @@ float rdirB = 1.00;
 
 // adaptive lowpass Filter
 int orderA = 1;
-float cutOffFreqA = 1.0;
+float cutOffFreqA = 1.5;
 
 int orderB = 1;
-float cutOffFreqB = 1.0;
+float cutOffFreqB = 1.5;
 
 // Filter instance
 AdaptiveLowPassFilter lpfA(orderA, cutOffFreqA);
@@ -65,7 +65,7 @@ SimplePID pidMotorB(kpB, kiB, kdB, outMin, outMax);
 bool pidMode = false; // true-PID MODE, false-SETUP MODE
 
 // initial i2cAddress
-int i2cAddress = 1;
+int i2cAddress = 0x55;
 
 // calcute allowable maximum angular velocity (for overall smooth operation of the whole system)
 float freq_per_tick_allowable = 2000.0; // Hz
@@ -85,8 +85,11 @@ float calc_wB_allowable()
 }
 
 // maximum motor velocity that can be commanded
-float maxVelA = calc_wA_allowable(); // in radians/sec
-float maxVelB = calc_wB_allowable(); // in radians/sec
+// float maxVelA = calc_wA_allowable(); // in radians/sec
+// float maxVelB = calc_wB_allowable(); // in radians/sec
+
+float maxVelA = 10.0; // in radians/sec
+float maxVelB = 10.0; // in radians/sec
 
 // for command timeout.
 unsigned long cmdVelTimeout, cmdVelTimeoutSampleTime = 0; // ms -> (1000/sampleTime) hz

@@ -176,8 +176,8 @@ void setPPR_A(float pprA){
   encA_ppr = getPPR_A();
   encA.setPulsePerRev(encA_ppr);
 
-  float wA_allowable = calc_wA_allowable(); // in radians/sec
-  setMAXVEL_A(wA_allowable);
+  // float wA_allowable = calc_wA_allowable(); // in radians/sec
+  // setMAXVEL_A(wA_allowable);
 }
 
 
@@ -191,8 +191,8 @@ void setPPR_B(float pprB){
   encB_ppr = getPPR_B();
   encB.setPulsePerRev(encB_ppr);
 
-  float wB_allowable = calc_wB_allowable(); // in radians/sec
-  setMAXVEL_B(wB_allowable);
+  // float wB_allowable = calc_wB_allowable(); // in radians/sec
+  // setMAXVEL_B(wB_allowable);
 }
 /////////////////////////////////////////
 
@@ -372,13 +372,13 @@ void resetAllParams(){
   setPPR_A(1000.00);
   setPPR_B(1000.00);
 
-  setI2CADDRESS(1);
+  setI2CADDRESS(85); // 0x55
 
   setFilterOrder_A(1);
   setFilterOrder_B(1);
 
-  setFilterCutOffFreq_A(1.00);
-  setFilterCutOffFreq_B(1.00);
+  setFilterCutOffFreq_A(1.50);
+  setFilterCutOffFreq_B(1.50);
 
   setStopFreq_A(10000);
   setStopFreq_B(10000);
@@ -386,10 +386,10 @@ void resetAllParams(){
   setRDIR_A(1.00);
   setRDIR_B(1.00);
 
-  float wA_allowable = calc_wA_allowable(); // in radians/sec
-  float wB_allowable = calc_wB_allowable(); // in radians/sec
-  setMAXVEL_A(wA_allowable);
-  setMAXVEL_B(wB_allowable);
+  // float wA_allowable = calc_wA_allowable(); // in radians/sec
+  // float wB_allowable = calc_wB_allowable(); // in radians/sec
+  setMAXVEL_A(10.0);
+  setMAXVEL_B(10.0);
 
   setAllowableFreq(2000.00);
 }
@@ -439,6 +439,6 @@ void updateGlobalParamsFromEERPOM(){
   maxVelA = getMAXVEL_A();
   maxVelB = getMAXVEL_B();
 
-  freq_per_tick_allowable = getAllowableFreq();
+  // freq_per_tick_allowable = getAllowableFreq();
 }
 /////////////////////////////////////////////////////////////
