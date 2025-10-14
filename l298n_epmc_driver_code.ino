@@ -100,7 +100,7 @@ unsigned long pidStopTime, pidStopSampleTime = 250;      // ms -> (1000/sampleTi
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(57600);
   Serial.setTimeout(2);
 
   initLed0();
