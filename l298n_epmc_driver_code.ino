@@ -94,7 +94,7 @@ void pidInit()
 
 ////////////////////// MAIN CODE ////////////////////////////////////////
 
-unsigned long serialCommTime, serialCommSampleTime = 10; // ms -> (1000/sampleTime) hz
+unsigned long serialCommTime, serialCommSampleTime = 5; // ms -> (1000/sampleTime) hz
 // unsigned long pidTime, pidSampleTime = 5;                // ms -> (1000/sampleTime) hz
 unsigned long pidStopTime, pidStopSampleTime = 250;      // ms -> (1000/sampleTime) hz
 
