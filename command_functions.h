@@ -377,6 +377,7 @@ float getCmdTimeout()
 float clearDataBuffer()
 {
   encA.tickCount = 0;
+  encB.tickCount = 0;
   filteredAngVelA = 0.0;
   filteredAngVelB = 0.0;
   targetA = 0.0;
